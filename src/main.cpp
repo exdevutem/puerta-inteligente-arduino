@@ -14,18 +14,18 @@ LiquidCrystal_I2C lcd(0x3F, 16, 2);         // Set for Display. Uses pin A4, A5
 #define INNERBUTTONPIN 6                    // Set for inner Button. Uses pin 6.
 int password[4];                            // Array for password.
 const int dummyPassword[4] = {1, 2, 3, 4};  // Array with an example password.
-#define RFIDRESETPIN 7                      // Set for RFID. Uses pin 7.
-#define RFIDSSPIN 8                         // Set for RFID. Uses pin 8.
-#define RFIDMOSIPIN 9                       // Set for RFID. Uses pin 9.
-#define RFIDMISOPIN 10                      // Set for RFID. Uses pin 10.
-#define RFIDSCKPIN 11                       // Set for RFID. Uses pin 11.
+#define RFIDRESETPIN 9                      // Set for RFID. Uses pin 7.
+#define RFIDSSPIN 10                        // Set for RFID. Uses pin 8.
+#define RFIDMOSIPIN 11                      // Set for RFID. Uses pin 9.
+#define RFIDMISOPIN 12                      // Set for RFID. Uses pin 10.
+#define RFIDSCKPIN 13                       // Set for RFID. Uses pin 11.
 MFRC522 rfid(RFIDSSPIN, RFIDRESETPIN);      // Set for RFID.
 byte nuidPICC[4];                           // Array to store UUID of the NFC
 bool passwordProcess = false;               // Password process status
 
 #define I2C_BUS_ADDRESS 8
 
-// Display functions
+// -- Display functions --
 // Constructor
 void startDisplay() {
     lcd.init();
@@ -41,7 +41,8 @@ void writeDisplay(String firstLine, String secondLine) {
     lcd.print(secondLine);
 }
 
-// Buttons and Password functions
+// -- Buttons and Password functions --
+// Constructor
 void startButtons() {
     pinMode(BUTTON1PIN, INPUT);
     pinMode(BUTTON2PIN, INPUT);
@@ -49,7 +50,8 @@ void startButtons() {
     pinMode(BUTTON4PIN, INPUT);
     pinMode(INNERBUTTONPIN, INPUT);
 }
-bool passwordIsFillable() {
+// Boolean to check if password array is "empty". Empty means {0, 0, 0, 0}
+bool isPasswordFillable() {
     bool fillable = false;
     for (int i = 0; i < sizeof(password); i++) {
         if (password[i] == 0) {
@@ -58,11 +60,13 @@ bool passwordIsFillable() {
     }
     return fillable;
 }
+// Makes the password "empty".
 void cleanPassword() {
     for (int i = 0; i < sizeof(password); i++) {
         password[i] = 0;
     }
 }
+// Replace the first 0 with the value.
 void setPasswordValue(int value) {
     for (int i = 0; i < sizeof(password); i++) {
         bool done = false;
@@ -72,6 +76,7 @@ void setPasswordValue(int value) {
         }
     }
 }
+// Comparison of passwords. If equal, return true.
 bool comparePasswords() {
     for (int i = 0; i < sizeof(password); i++) {
         int inputPasswordValue = password[i];
@@ -82,6 +87,7 @@ bool comparePasswords() {
     }
     return true;
 }
+// Main function for buttons.
 void checkButtons() {
     int button1State = digitalRead(BUTTON1PIN);
     int button2State = digitalRead(BUTTON2PIN);
@@ -92,7 +98,7 @@ void checkButtons() {
     if (innerButtonState == HIGH) {
         // TO-DO activate Servo
     }
-    if (passwordProcess == true && passwordIsFillable() == true &&
+    if (passwordProcess == true && isPasswordFillable() == true &&
         (button1State == HIGH || button2State == HIGH || button3State == HIGH ||
          button4State == HIGH)) {
         // When the password array has at least one 0.
@@ -106,7 +112,7 @@ void checkButtons() {
             setPasswordValue(4);
         }
 
-        if (passwordIsFillable() == false) {
+        if (isPasswordFillable() == false) {
             if (comparePasswords() == true) {
                 // TO-DO: Turn on the Servo
                 writeDisplay("Ingrese clave:", "Clave correcta");
@@ -122,12 +128,14 @@ void checkButtons() {
     }
 }
 
-// RFID functions
+// -- RFID functions --
+// Constructor
 void startRFID() {
     SPI.begin();      // Init SPI bus
     rfid.PCD_Init();  // Init MFRC522
 }
-bool compareRFIDuuids() {
+// Comparison of RFID UIDs.
+bool compareRFIDuids() {
     if (rfid.uid.uidByte[0] == nuidPICC[0] &&
         rfid.uid.uidByte[1] == nuidPICC[1] &&
         rfid.uid.uidByte[2] == nuidPICC[2] &&
@@ -137,29 +145,34 @@ bool compareRFIDuuids() {
         return false;
     }
 }
+// Main function for RFID.
 void checkRFID() {
-    // Verify if the NUID has been readed
-    if (!rfid.PICC_ReadCardSerial()) {
-        return;
-    };
+    // Detecting and reading card
+    if (!rfid.PICC_IsNewCardPresent()) return;
+    if (!rfid.PICC_ReadCardSerial()) return;
 
-    if (compareRFIDuuids()) {
-        // If the uuid are equals, start the password process.
-        writeDisplay("Club ExDev", "Tarjeta reconocida");
+    if (compareRFIDuids()) {
+        // If the uid are equals, start the password process.
+        writeDisplay("Club ExDev", "Bienvenide");
         passwordProcess = true;
         cleanPassword();
         delay(2000);
         writeDisplay("Ingrese clave:", "");
     } else {
         // This is just for test. Should delete later.
-        // This store the card uuid.
+        // This store the card uid.
         for (byte i = 0; i < 4; i++) {
             nuidPICC[i] = rfid.uid.uidByte[i];
         }
     }
+
+    // These are to prevent two PICC actives at the same time.
+    rfid.PICC_HaltA();       // Halt PICC
+    rfid.PCD_StopCrypto1();  // Stop encryption on PCD
 }
 
-// Unordered functions
+// -- Unordered functions --
+// Must clean up these later.
 void menu(int option) {
     switch (option) {
         case 1:
@@ -173,7 +186,6 @@ void menu(int option) {
             break;
     }
 }
-
 // function that executes whenever data is received from master
 void receiveEvent(int howMany) {
     while (0 < Wire.available()) {
@@ -182,7 +194,6 @@ void receiveEvent(int howMany) {
     }
     Serial.println(); /* to newline */
 }
-
 // function that executes whenever data is requested from master
 void requestEvent() { Wire.write("Hello NodeMCU"); /*send string on request */ }
 
