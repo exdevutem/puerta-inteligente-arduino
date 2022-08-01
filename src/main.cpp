@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <LiquidCrystal_I2C.h>
 #include <MFRC522.h>
+#include <SD.h>
 #include <SPI.h>
 #include <Wire.h>
 
@@ -13,6 +14,7 @@
 #define BUTTON3PIN 4       // Set for Button 3. Uses pin 4.
 #define BUTTON4PIN 5       // Set for Button 4. Uses pin 5.
 #define INNERBUTTONPIN 6   // Set for inner Button. Uses pin 6.
+#define SDPIN 7            // Set for SD module. Uses pin 7.
 #define I2C_BUS_ADDRESS 8  //
 #define RFIDRESETPIN 9     // Set for RFID. Uses pin 9.
 #define RFIDSSPIN 10       // Set for RFID. Uses pin 10.
@@ -25,6 +27,7 @@ MFRC522 rfid(RFIDSSPIN, RFIDRESETPIN);  // Set for RFID.
 bool passwordProcess = false;           // Password process status
 int password[4];                        // Array for password.
 byte nuidPICC[4];                       // Array to store UUID of the NFC
+File exDevFile;                         // File to manipulate the SD file.
 // Dummys
 const int dummyPassword[4] = {1, 2, 3, 4};  // Array with an example password.
 
@@ -172,6 +175,62 @@ void checkRFID() {
     // These are to prevent two PICC actives at the same time.
     rfid.PICC_HaltA();       // Halt PICC
     rfid.PCD_StopCrypto1();  // Stop encryption on PCD
+}
+
+// -- SD functions --
+// Constructor
+void startSD() {
+    if (!SD.begin(SDPIN)) {
+        Serial.println("No se pudo inicializar");
+        return;
+    }
+    Serial.println("inicializacion exitosa");
+}
+// Check if file already exists in SD
+bool checkFileExists(String filename) {
+    if (SD.exists(filename)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+// Find or create
+void findOrCreateSD() {
+    const filename = "exDev.txt";
+    if (checkFileExists(filename)) {
+        exDevFile = SD.open(filename);
+    } else {
+        const created = SD.mkdir(filename);
+        if (created) {
+            exDevFile = SD.open(filename);
+        } else {
+            Serial.println("No se pudo crear el archivo");
+        }
+    }
+}
+// Write
+void writeSD(String text) {
+    findOrCreateSD();
+    if (exDevFile) {
+        exDevFile.println(text);
+        exDevFile.close();
+    }
+}
+// Find in file
+bool findSD(String text) {
+    findOrCreateSD();
+    if (exDevFile) {
+        bool textFound = false;
+        while (exDevFile.available()) {
+            String fileText = exDevFile.read();
+            if (fileText == text) {
+                textFound = true;
+            }
+        }
+        exDevFile.close();
+        return textFound;
+    }
+    return false;
 }
 
 // -- Unordered functions --
