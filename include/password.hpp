@@ -2,7 +2,7 @@
 bool isPasswordFillable()
 {
     bool fillable = false;
-    for (int i = 0; i < sizeof(password); i++)
+    for (int i = 0; i < passSize; i++)
     {
         if (password[i] == 0)
         {
@@ -14,7 +14,7 @@ bool isPasswordFillable()
 // Makes the password "empty".
 void cleanPassword()
 {
-    for (int i = 0; i < sizeof(password); i++)
+    for (int i = 0; i < passSize; i++)
     {
         password[i] = 0;
     }
@@ -22,7 +22,7 @@ void cleanPassword()
 // Replace the first 0 with the value.
 void setPasswordValue(int value)
 {
-    for (int i = 0; i < sizeof(password); i++)
+    for (int i = 0; i < passSize; i++)
     {
         bool done = false;
         if (password[i] == 0 && done == false)
@@ -35,7 +35,7 @@ void setPasswordValue(int value)
 // Comparison of passwords. If equal, return true.
 bool comparePasswords()
 {
-    for (int i = 0; i < sizeof(password); i++)
+    for (int i = 0; i < passSize; i++)
     {
         int inputPasswordValue = password[i];
         int storedPasswordValue = dummyPassword[i];

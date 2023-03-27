@@ -1,6 +1,5 @@
 // Constructor
-void startSD()
-{
+void startSD() {
     if (!SD.begin(SDPIN))
     {
         Serial.println("No se pudo inicializar");
@@ -9,23 +8,18 @@ void startSD()
     Serial.println("inicializacion exitosa");
 }
 // Check if file already exists in SD
-bool checkFileExists(String filename)
-{
-    if (SD.exists(filename))
-    {
+bool checkFileExists(String filename) {
+    if (SD.exists(filename)) {
         return true;
     }
-    else
-    {
+    else {
         return false;
     }
 }
 // Find or create
-void findOrCreateSD()
-{
+void findOrCreateSD() {
     String filename = "exDev.txt";
-    if (checkFileExists(filename))
-    {
+    if (checkFileExists(filename)) {
         exDevFile = SD.open(filename);
     }
     else

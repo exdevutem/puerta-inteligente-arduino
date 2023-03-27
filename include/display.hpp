@@ -1,13 +1,11 @@
-void startDisplay()
-{
+void startDisplay() {
     lcd.init();
-    lcd.backlight();
+    lcd.setBacklight(HIGH);
     lcd.clear();
     lcd.print("Club ExDev");
 }
 
-void writeDisplay(String firstLine, String secondLine)
-{
+void writeDisplay(String firstLine, String secondLine) {
     lcd.clear();
     lcd.print(firstLine);
     lcd.setCursor(0, 1);

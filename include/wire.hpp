@@ -1,7 +1,5 @@
-void receiveEvent(int howMany)
-{
-    while (0 < Wire.available())
-    {
+void receiveEvent(int howMany) {
+    while (0 < Wire.available()) {
         int c = Wire.read();
         // menu(c);
     }
@@ -10,8 +8,7 @@ void receiveEvent(int howMany)
 
 void requestEvent() { Wire.write("Hello NodeMCU"); /*send string on request */ }
 
-void startWireConnection()
-{
+void startWireConnection() {
     Wire.begin(I2C_BUS_ADDRESS);
     Wire.onReceive(receiveEvent); /* register receive event */
     Wire.onRequest(requestEvent); /* register request event */
