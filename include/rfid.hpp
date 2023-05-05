@@ -38,8 +38,9 @@ void checkRFID(bool& _passwordProcess) {
             nuidPICC[i] = rfid.uid.uidByte[i];
             test += nuidPICC[i];
         }
+        Serial.println(test);
+        
     }
-    Serial.println(test);
     // These are to prevent two PICC actives at the same time.
     rfid.PICC_HaltA();      // Halt PICC
     rfid.PCD_StopCrypto1(); // Stop encryption on PCD

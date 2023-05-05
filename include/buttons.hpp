@@ -12,11 +12,14 @@ int lastButton1State = 0;
 int lastButton2State = 0;
 int lastButton3State = 0;
 int lastButton4State = 0;
-int aux = 0;
+
+// index de password.
+//int index = 0;
 // Main function for buttons.
 void checkButtons(int& _ms)
 {
     ms = 50;
+    int index = 0;
     int button1State = digitalRead(BUTTON1PIN);
     int button2State = digitalRead(BUTTON2PIN);
     int button3State = digitalRead(BUTTON3PIN);
@@ -25,7 +28,7 @@ void checkButtons(int& _ms)
     if (innerButtonState == HIGH)
     {
         // TO-DO activate Servo
-    }
+    }   
     if (password[passSize-1] == 0)
     {
         //Serial.println("password");
@@ -33,26 +36,26 @@ void checkButtons(int& _ms)
         if (button1State == HIGH && lastButton1State != button1State)
         {
             Serial.println("Boton 1");
-            password[aux] = 1;
-            aux++;
+            password[index] = 1;
+            index++;
         }
         if (button2State == HIGH && lastButton2State != button2State)
         {
             Serial.println("Boton 2");
-            password[aux] = 2;
-            aux++;
+            password[index] = 2;
+            index++;
         }
         if (button3State == HIGH && lastButton3State != button3State)
         {
             Serial.println("Boton 3");
-            password[aux] = 3;
-            aux++;
+            password[index] = 3;
+            index++;
         }
         if (button4State == HIGH && lastButton4State != button4State)
         {
             Serial.println("Boton 4");
-            password[aux] = 4;
-            aux++;
+            password[index] = 4;
+            index++;
         }
     } else
       {
@@ -65,14 +68,14 @@ void checkButtons(int& _ms)
             else
             {
                 // If the comparison is wrong, this won't let in.
-                //writeDisplay("Ingrese clave:", "Clave incorrecta");
+                writeDisplay("Ingrese clave:", "Clave incorrecta");
                 //cleanPassword();
                 Serial.println("Clave incorrecta");
             }
             passwordProcess = false;
             delay(2000);
             writeDisplay("Club ExDev", "");
-            aux = 0;
+            index = 0;
             _ms = 1000;
       }
     // save the current state as the last state, for next time through the loop

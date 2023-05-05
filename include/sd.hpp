@@ -1,3 +1,5 @@
+#include "../include/ArduinoJson-v6.21.1.h"
+
 // Constructor
 void startSD() {
     if (!SD.begin(SDPIN))
@@ -18,21 +20,23 @@ bool checkFileExists(String filename) {
 }
 // Find or create
 void findOrCreateSD() {
-    String filename = "exDev.txt";
+    String filename = "ExDev.txt";
     if (checkFileExists(filename)) {
         exDevFile = SD.open(filename);
     }
     else
     {
-        boolean created = SD.mkdir(filename);
+        Serial.println("No se encontró el archivo");
+        /*boolean created = SD.mkdir(filename); //crea carpetas...
         if (created)
         {
+            Serial.println("exDev.json creado correctamente");
             exDevFile = SD.open(filename);
         }
         else
         {
             Serial.println("No se pudo crear el archivo");
-        }
+        }*/
     }
 }
 // Write
@@ -46,23 +50,22 @@ void writeSD(String text)
     }
 }
 // Find in file
-bool findSD(String text)
+bool findSD(String id)
 {
     findOrCreateSD();
-    if (exDevFile)
-    {
-        bool textFound = false;
+    //if (exDevFile) {
+        // The filter: it contains "true" for each value we want to keep
+        StaticJsonDocument<200> filter;
+        //filter["miembros"][0]["id"] = 1234;
+        filter["miembros"][0]["id"] = "1234";
+        // Deserialize the document
+        StaticJsonDocument<400> doc;
+        deserializeJson(doc, exDevFile, DeserializationOption::Filter(filter));
+        //deserializeJson(doc, exDevFile);
+        // Print the result
+        serializeJsonPretty(doc, Serial);
+        //String nombre = serializeJsonPretty(doc, Serial);
 
-        while (exDevFile.available())
-        {
-            int fileText = exDevFile.read();
-            if (fileText == text[0])
-            {
-                textFound = true;
-            }
-        }
-        exDevFile.close();
-        return textFound;
-    }
+    //}
     return false;
 }

@@ -36,9 +36,13 @@ void setup()
 {
   startWireConnection();
   Serial.begin(9600); /* start serial for debug */
+  while (!Serial) {
+    ; // wait for serial port to connect. Needed for Leonardo only
+  }
   startRFID();
   startDisplay();
   startButtons();
+  startSD();
   passwordProcess = false;
   ms = 1000;
   //int aux = 0;
@@ -51,10 +55,13 @@ int seconds;
     String text = String(seconds) + " Segundos";
     Serial.println(text);
 
-  checkRFID(passwordProcess);
   if (passwordProcess) {
     //Serial.println("checkButtons");
     checkButtons(ms);
+  } else {
+    checkRFID(passwordProcess);
+    findSD("1234");
+  
   }
 
   delay(ms);

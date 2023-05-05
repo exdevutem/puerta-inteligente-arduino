@@ -4,14 +4,15 @@
 #define BUTTON3PIN 4      // Set for Button 3. Uses pin 4.
 #define BUTTON4PIN 5      // Set for Button 4. Uses pin 5.
 #define INNERBUTTONPIN 6  // Set for inner Button. Uses pin 6.
-#define SDPIN 44           // Set for SD module. Uses pin 7.
+#define SDPIN 53           // Set for SD module. Uses pin 7.
 //#define SDSCK 
 #define I2C_BUS_ADDRESS 10 //
 #define RFIDRESETPIN 8    // Set for RFID. Uses pin 8.
 #define RFIDSSPIN 9     // Set for RFID. Uses pin 9.
-#define RFIDMOSIPIN 51    // Set for RFID. Uses pin 11.
-#define RFIDMISOPIN 50    // Set for RFID. Uses pin 12.
-#define RFIDSCKPIN 52     // Set for RFID. Uses pin 13.
+#define RFIDMOSIPIN 47    // Set for RFID. Uses pin 11.
+#define RFIDMISOPIN 46    // Set for RFID. Uses pin 12.
+#define RFIDSCKPIN 45     // Set for RFID. Uses pin 13.
+
 
 
 // inits
