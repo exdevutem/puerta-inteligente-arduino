@@ -16,10 +16,8 @@
 // -- Unordered functions --
 // Must clean up these later.
 
-void menu(int option)
-{
-  switch (option)
-  {
+void menu(int option) {
+  switch (option) {
     case 1:
       Serial.print("Opción 1");
       break;
@@ -32,8 +30,7 @@ void menu(int option)
   }
 }
 
-void setup()
-{
+void setup() {
   startWireConnection();
   Serial.begin(9600); /* start serial for debug */
   while (!Serial) {
@@ -44,25 +41,20 @@ void setup()
   startButtons();
   startSD();
   passwordProcess = false;
-  ms = 1000;
   //int aux = 0;
+  findSD("1234");
 }
 
-void loop()
-{
-int seconds;
-    seconds = millis() / 1000;
-    String text = String(seconds) + " Segundos";
-    Serial.println(text);
-
+void loop() {
+/*   int seconds = millis() / 1000;
+  Serial.println(String(seconds) + " Segundos"); */
   if (passwordProcess) {
-    //Serial.println("checkButtons");
-    checkButtons(ms);
+    ms = 50;
+    //Serial.println("checkButtons"); 
+    checkButtons(passwordProcess);
   } else {
-    checkRFID(passwordProcess);
-    findSD("1234");
-  
+    //Serial.println("checkRFID");
+    checkRFID(passwordProcess);               
   }
-
   delay(ms);
 }
