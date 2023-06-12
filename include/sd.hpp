@@ -71,28 +71,27 @@ void writeSD(String text, File exDevFile) {
 }
 
 // Find in file
-bool findSD(String rfid) {  // should be int
-    if (!exDevFile) { 
-        exDevFile = findOrCreateSD();
-        DynamicJsonDocument doc(1024);
+void findSD() {  // should be int
+    if (exDevFile) return;
+    
+    exDevFile = findOrCreateSD();
+    DynamicJsonDocument doc(1024);
+    DeserializationError error = deserializeJson(doc, exDevFile);
 
-        DeserializationError error = deserializeJson(doc, exDevFile);
-        if (error) {
-            Serial.print(F("Failed to parse JSON file: "));
-            Serial.println(error.f_str());
-            return true;
-        }
-        sizeMembers = doc.size();
-
-        delete membersList;
-        membersList = new Member[sizeMembers]; //(Member *) malloc(sizeMembers * sizeof(Member));
-
-        Serial.println(sizeMembers);
-        for (size_t i = 0; i < sizeMembers; i++) {
-            membersList[i].name = doc[i]["name"];
-            membersList[i].rfid = doc[i]["rfid"];
-            membersList[i].pass = doc[i]["pass"];
-        }
+    if (error) {
+        Serial.print(F("Failed to parse JSON file: "));
+        Serial.println(error.f_str());
+        return;
     }
-    return false;
+
+    sizeMembers = doc.size();
+
+    delete membersList;
+    membersList = new Member[sizeMembers];
+
+    for (size_t i = 0; i < sizeMembers; i++) {
+        membersList[i].name = doc[i]["name"];
+        membersList[i].rfid = doc[i]["rfid"];
+        membersList[i].pass = doc[i]["pass"];
+    }
 }

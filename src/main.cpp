@@ -41,8 +41,7 @@ void setup() {
   startButtons();
   startSD();
   passwordProcess = false;
-  //int aux = 0;
-  findSD("1234");
+  findSD();
 }
 
 void loop() {
