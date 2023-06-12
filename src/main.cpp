@@ -46,8 +46,10 @@ void setup() {
 }
 
 void loop() {
-/*   int seconds = millis() / 1000;
-  Serial.println(String(seconds) + " Segundos"); */
+/*
+int seconds = millis() / 1000;
+  Serial.println(String(seconds) + " Segundos"); 
+  */
   if (passwordProcess) {
     ms = 50;
     //Serial.println("checkButtons"); 

@@ -74,13 +74,6 @@ void writeSD(String text, File exDevFile) {
 bool findSD(String rfid) {  // should be int
     if (!exDevFile) { 
         exDevFile = findOrCreateSD();
-        /* 
-        size_t fileSize = exDevFile.size();
-        char* buffer = (char*) malloc(fileSize + 1);
-
-        exDevFile.readBytes(buffer, fileSize);
-        buffer[fileSize] = '\0'; */
-
         DynamicJsonDocument doc(1024);
 
         DeserializationError error = deserializeJson(doc, exDevFile);
@@ -89,24 +82,17 @@ bool findSD(String rfid) {  // should be int
             Serial.println(error.f_str());
             return true;
         }
-        /*
-        for (JsonVariant variant : doc.as<JsonArray>()) {
-            JsonObject object = variant.as<JsonObject>();
-            const char* name = object["name"];
-            Serial.println(name);
+        sizeMembers = doc.size();
+
+        delete membersList;
+        membersList = new Member[sizeMembers]; //(Member *) malloc(sizeMembers * sizeof(Member));
+
+        Serial.println(sizeMembers);
+        for (size_t i = 0; i < sizeMembers; i++) {
+            membersList[i].name = doc[i]["name"];
+            membersList[i].rfid = doc[i]["rfid"];
+            membersList[i].pass = doc[i]["pass"];
         }
-        */
-        for (size_t i = 0; i < 5; i++) {
-            member[i].name = doc[i]["name"];
-            member[i].rfid = doc[i]["rfid"];
-            member[i].pass = doc[i]["pass"];
-        }
-        /*
-        for (size_t i = 0; i < 5; i++) {
-            Serial.println(member[i].rfid);
-        }
-        */
-        
     }
     return false;
 }

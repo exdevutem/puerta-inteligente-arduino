@@ -34,10 +34,11 @@ int ms = 1000;
 const int dummyPassword[4] = {1, 2, 3, 4}; // Array with an example password.
 
 // Miembros
+size_t sizeMembers = 2;
 typedef struct {
     const char* name;
     const char* rfid;
     const char* pass;
-} Members;
+} Member;
 
-Members member[5];
+Member *membersList = nullptr;

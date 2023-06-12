@@ -41,16 +41,14 @@ void startPasswordProcess(bool& _passwordProcess) {
     writeSecondLine("Bienvenide");
     _passwordProcess = true;
     cleanPassword();
-    delay(2000);
+    delay(1000);
     writeDisplay("Ingrese clave:", "");
 }
 
 // Comparison of passwords. If equal, return true.
 bool comparePasswords(String password) {
     for (size_t i = 0; i < passSize; i++) {
-        if (password.equals(member[i].pass)) {
-            return true;
-        }
+        if (password.equals(membersList[i].pass)) { return true; }
     }
     return false;
 }

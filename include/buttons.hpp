@@ -37,6 +37,7 @@ void onButtonPressed(int value) {
 }
 
 void onEndProcess(bool& _passwordProcess) {
+    ms = 1000;
     _passwordProcess = false;
     writeDisplay("Club ExDev", "");
     index = 0;
@@ -48,13 +49,13 @@ void checkTimeout(bool& _passwordProcess) {
         lastBeat = millis();
     }
 
-    unsigned long differnece = millis() - lastBeat;
-
+    unsigned long difference = millis() - lastBeat;
+    
     if (DEBUG) {
         //Serial.println(differnece);
     }
 
-    if (differnece >= timeout) {
+    if (difference >= timeout) {
         Serial.println("Timeout");
         onEndProcess(_passwordProcess);
     }
@@ -62,7 +63,7 @@ void checkTimeout(bool& _passwordProcess) {
 
 String arrToString(int *arr, size_t size) {
     String result = "";
-    int n = size / sizeof(arr);
+    size_t n = size / sizeof(arr);
     for (size_t i = 0; i < n; i++) {
         result += arr[i];
     }

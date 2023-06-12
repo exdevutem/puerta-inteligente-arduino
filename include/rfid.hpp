@@ -28,10 +28,12 @@ String uidToString(MFRC522::Uid& uid) {
      return rfidUid;
 }
 
-bool isMember(String rfid) {  // should be int
-    size_t n = 5; // sizeof(members) / sizeof(members[0]);
-    for (size_t i = 0; i < n; i++) {
-        if (rfid.equals(member[i].rfid))  {
+bool isMember(String rfid) {
+    //size_t n = 6; // sizeof(members) / sizeof(members[0]);
+    for (size_t i = 0; i < sizeMembers; i++) {
+        // Serial.print("isMember name ");
+        Serial.println(membersList[i].name);
+         if (rfid.equals(membersList[i].rfid)) {
             return true;
         }
     }
@@ -50,7 +52,7 @@ bool compareRFIDuids() {
         Serial.println("Valido");
         return true;
     } else {
-        Serial.println("inValido");
+        Serial.println("invalido");
         return false;
     }
     /*
@@ -71,7 +73,7 @@ bool compareRFIDuids() {
 void checkRFID(bool& _passwordProcess) {
     // Detecting and reading card
     if (!rfid.PICC_IsNewCardPresent()) {
-        //Serial.println("!IsNewCardPresent");
+        Serial.println("!IsNewCardPresent");
         return;
     }
     if (!rfid.PICC_ReadCardSerial()) {
