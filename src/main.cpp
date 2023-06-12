@@ -41,7 +41,7 @@ void setup() {
   startButtons();
   startSD();
   passwordProcess = false;
-  findSD();
+  loadMembersToList();
 }
 
 void loop() {
@@ -51,10 +51,8 @@ int seconds = millis() / 1000;
   */
   if (passwordProcess) {
     ms = 50;
-    //Serial.println("checkButtons"); 
     checkButtons(passwordProcess);
   } else {
-    //Serial.println("checkRFID");
     checkRFID(passwordProcess);               
   }
   delay(ms);

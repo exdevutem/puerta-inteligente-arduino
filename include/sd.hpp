@@ -39,39 +39,16 @@ bool checkFileExists(String filename) {
 // Find or create
 File findOrCreateSD() {
     String filename = "EXDE~1.JSO"; // NO AGREGA LA N A JSON
-    //String filename = "ExDev.json";
-    //printDirectory(SD.open("/"), 0);
     if (!checkFileExists(filename)) {
         Serial.println("No se encontró el archivo");
         delay(2000);
-        //exit(EXIT_FAILURE);
     }
     exDevFile = SD.open(filename);
     return exDevFile;
-    /*
-    boolean created = SD.mkdir(filename); //crea carpetas...
-    if (created)
-    {
-        Serial.println("exDev.json creado correctamente");
-        exDevFile = SD.open(filename);
-    }
-    else
-    {
-        Serial.println("No se pudo crear el archivo");
-     }*/
-}
-
-// Write
-void writeSD(String text, File exDevFile) {
-    findOrCreateSD();
-    if (exDevFile) {
-        exDevFile.println(text);
-        exDevFile.close();
-    }
 }
 
 // Find in file
-void findSD() {  // should be int
+void loadMembersToList() {
     if (exDevFile) return;
     
     exDevFile = findOrCreateSD();

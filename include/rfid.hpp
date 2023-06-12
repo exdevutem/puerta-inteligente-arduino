@@ -72,10 +72,8 @@ bool compareRFIDuids() {
 // Main function for RFID.
 void checkRFID(bool& _passwordProcess) {
     // Detecting and reading card
-    if (!rfid.PICC_IsNewCardPresent()) {
-        Serial.println("!IsNewCardPresent");
-        return;
-    }
+    if (!rfid.PICC_IsNewCardPresent()) return;
+    
     if (!rfid.PICC_ReadCardSerial()) {
         Serial.println("ReadCardSerial");
         return;
@@ -84,7 +82,6 @@ void checkRFID(bool& _passwordProcess) {
     if (compareRFIDuids()) {
         // If the uid are equals, start the password process.
         startPasswordProcess(_passwordProcess);
-        
     }
     
     // These are to prevent two PICC actives at the same time.
