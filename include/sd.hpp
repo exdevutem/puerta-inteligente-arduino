@@ -24,7 +24,7 @@ void printDirectory(File dir, int numTabs) {
 }
 // Constructor
 void startSD() {
-    if (!SD.begin(SDPIN)) {
+    if (!SD.begin(SD_PIN)) {
         Serial.println("No se pudo inicializar");
         writeDisplay("Inicializacion","fallida");
         exit(EXIT_FAILURE);

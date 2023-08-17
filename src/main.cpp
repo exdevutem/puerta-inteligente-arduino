@@ -34,6 +34,7 @@ void menu(int option) {
 void setup() {
   //startWireConnection();
   Serial.begin(9600); /* start serial for debug */
+  SPI.begin();     // Init SPI bus
   startDisplay();
   startRFID();
   startButtons();
