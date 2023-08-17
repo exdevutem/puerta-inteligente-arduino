@@ -1,4 +1,3 @@
-
 #define DEBUG true
 
 unsigned long lastBeat = 0;
@@ -8,6 +7,7 @@ int lastButton1State = 0;
 int lastButton2State = 0;
 int lastButton3State = 0;
 int lastButton4State = 0;
+int lastInnerButton = 0;
 
 // index de password.
 int index = 0;
@@ -19,6 +19,30 @@ void startButtons() {
     pinMode(BUTTON3PIN, INPUT);
     pinMode(BUTTON4PIN, INPUT);
     pinMode(INNERBUTTONPIN, INPUT);
+}
+
+void openServo() {
+    MG995_Servo.attach(Servo_PWM);  // Connect D6 of Arduino with PWM signal pin of servo motor
+    MG995_Servo.write(180); //Turn left high speed
+    isServoOpen = true;
+    delay(2000);
+    MG995_Servo.detach();//Stop. You can use deatch function or use write(x), as x is the middle of 0-180 which is 90, but some lack of precision may change this value
+}
+
+void closeServo() {
+    MG995_Servo.attach(Servo_PWM);  // Connect D6 of Arduino with PWM signal pin of servo motor
+    MG995_Servo.write(0); // Turn clockwise at high speed
+    isServoOpen = false;
+    delay(2000);
+    MG995_Servo.detach();//Stop. You can use deatch function or use write(x), as x is the middle of 0-180 which is 90, but some lack of precision may change this value
+}
+
+void Servo(){
+    if(isServoOpen) {
+        closeServo();
+    } else {
+        openServo();
+    }
 }
 
 void onButtonPressed(int value) {
@@ -56,7 +80,9 @@ void checkTimeout(bool& _passwordProcess) {
     }
 
     if (difference >= timeout) {
+        writeDisplay("Ingrese clave:", "Tiempo excedido");
         Serial.println("Timeout");
+        delay(1000);
         onEndProcess(_passwordProcess);
     }
 }
@@ -78,10 +104,7 @@ void checkButtons(bool& _passwordProcess) {
     int button2State = digitalRead(BUTTON2PIN);
     int button3State = digitalRead(BUTTON3PIN);
     int button4State = digitalRead(BUTTON4PIN);
-    int innerButtonState = digitalRead(INNERBUTTONPIN);
-    if (innerButtonState == HIGH) {
-        // TO-DO activate Servo
-    }   
+
     if (password[passSize-1] == 0) {
         //Serial.println("password");
         // When the password array has at least one 0.
@@ -103,6 +126,7 @@ void checkButtons(bool& _passwordProcess) {
             // TO-DO: Turn on the Servo
             writeDisplay("Ingrese clave:", "Clave correcta");
             Serial.println("Clave correcta");
+            Servo();
         } else {
             // If the comparison is wrong, this won't let in.
             writeDisplay("Ingrese clave:", "Clave incorrecta");
@@ -117,4 +141,14 @@ void checkButtons(bool& _passwordProcess) {
     lastButton2State = button2State;
     lastButton3State = button3State;
     lastButton4State = button4State;
+}
+
+void innerButton() {
+    int innerButtonState = digitalRead(INNERBUTTONPIN);
+    if (innerButtonState == HIGH /*&& lastInnerButton != innerButtonState*/) {
+        Serial.println("InnerButton");
+        // TO-DO activate Servo
+        Servo();
+    }
+    lastInnerButton = innerButtonState;
 }

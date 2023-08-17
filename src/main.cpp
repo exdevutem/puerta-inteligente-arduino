@@ -4,6 +4,7 @@
 #include <MFRC522.h>
 #include <SPI.h>
 #include <Wire.h>
+#include <Servo.h>
 
 #include "./settings.hpp"
 #include "../include/wire.hpp"
@@ -31,13 +32,10 @@ void menu(int option) {
 }
 
 void setup() {
-  startWireConnection();
+  //startWireConnection();
   Serial.begin(9600); /* start serial for debug */
-  while (!Serial) {
-    ; // wait for serial port to connect. Needed for Leonardo only
-  }
-  startRFID();
   startDisplay();
+  startRFID();
   startButtons();
   startSD();
   passwordProcess = false;
@@ -45,12 +43,16 @@ void setup() {
 }
 
 void loop() {
-/*
-int seconds = millis() / 1000;
+  /*
+  int seconds = millis() / 1000;
   Serial.println(String(seconds) + " Segundos"); 
+  MG995_Servo.write(180);
+  delay(2000);
+  MG995_Servo.write(0);
+  delay(2000);
   */
+ innerButton();
   if (passwordProcess) {
-    ms = 50;
     checkButtons(passwordProcess);
   } else {
     checkRFID(passwordProcess);               

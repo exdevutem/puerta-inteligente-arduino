@@ -6,10 +6,8 @@
 
 bool isPasswordFillable() {
     bool fillable = false;
-    for (int i = 0; i < passSize; i++)
-    {
-        if (password[i] == 0)
-        {
+    for (int i = 0; i < passSize; i++) {
+        if (password[i] == 0) {
             fillable = true;
         }
     }
@@ -23,13 +21,10 @@ void cleanPassword() {
 }
 
 // Replace the first 0 with the value.
-void setPasswordValue(int value)
-{
-    for (int i = 0; i < passSize; i++)
-    {
+void setPasswordValue(int value) {
+    for (int i = 0; i < passSize; i++) {
         bool done = false;
-        if (password[i] == 0 && done == false)
-        {
+        if (password[i] == 0 && done == false) {
             password[i] = value;
             done = true;
         }
@@ -38,17 +33,15 @@ void setPasswordValue(int value)
 
 void startPasswordProcess(bool& _passwordProcess) {
     Serial.println("Bienvenide");
-    writeSecondLine("Bienvenide");
+    writeDisplay("Bienvenidx", membersList[indexMember].name);
     _passwordProcess = true;
     cleanPassword();
-    delay(1000);
+    delay(1500);
     writeDisplay("Ingrese clave:", "");
+    ms = 50;
 }
 
 // Comparison of passwords. If equal, return true.
 bool comparePasswords(String password) {
-    for (size_t i = 0; i < passSize; i++) {
-        if (password.equals(membersList[i].pass)) { return true; }
-    }
-    return false;
+    return password.equals(membersList[indexMember].pass) ? true : false;
 }

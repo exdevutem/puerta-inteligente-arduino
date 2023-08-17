@@ -26,9 +26,13 @@ void printDirectory(File dir, int numTabs) {
 void startSD() {
     if (!SD.begin(SDPIN)) {
         Serial.println("No se pudo inicializar");
-        return;
+        writeDisplay("Inicializacion","fallida");
+        exit(EXIT_FAILURE);
     }
-    Serial.println("inicializacion exitosa");
+    Serial.println("Inicializacion exitosa");
+    writeDisplay("Inicializacion","exitosa");
+    delay(2000);
+    writeDisplay("Club ExDev","");
 }
 
 // Check if file already exists in SD
@@ -71,4 +75,6 @@ void loadMembersToList() {
         membersList[i].rfid = doc[i]["rfid"];
         membersList[i].pass = doc[i]["pass"];
     }
+    
+    exDevFile.close();
 }

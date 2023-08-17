@@ -4,27 +4,13 @@ void startRFID() {
     rfid.PCD_Init(); // Init MFRC522
 }
 
-// Comparison of RFID UIDs.
-char* byteToString(byte *arr, size_t size) {
-    size_t n = size / sizeof(arr);
-    char* text = NULL;
-    for (size_t i = 0; i <= n; i++) {
-        text += arr[i];
-    } 
-    Serial.println(text);
-    return text;
-}
-
 String uidToString(MFRC522::Uid& uid) {  
     String rfidUid = "";
-  
     for (byte i = 0; i < uid.size; i++) {
         rfidUid += uid.uidByte[i] < 0x10 ? " 0" : "";
         rfidUid += String(uid.uidByte[i], HEX);
     }
-
      rfidUid.toUpperCase();
-
      return rfidUid;
 }
 
@@ -32,8 +18,9 @@ bool isMember(String rfid) {
     //size_t n = 6; // sizeof(members) / sizeof(members[0]);
     for (size_t i = 0; i < sizeMembers; i++) {
         // Serial.print("isMember name ");
-        Serial.println(membersList[i].name);
-         if (rfid.equals(membersList[i].rfid)) {
+        // Serial.println(membersList[i].name);
+        if (rfid.equals(membersList[i].rfid)) {
+            indexMember = i;
             return true;
         }
     }
@@ -52,7 +39,7 @@ bool compareRFIDuids() {
         Serial.println("Valido");
         return true;
     } else {
-        Serial.println("invalido");
+        Serial.println("Invalido");
         return false;
     }
     /*
@@ -72,13 +59,15 @@ bool compareRFIDuids() {
 // Main function for RFID.
 void checkRFID(bool& _passwordProcess) {
     // Detecting and reading card
-    if (!rfid.PICC_IsNewCardPresent()) return;
-    
-    if (!rfid.PICC_ReadCardSerial()) {
-        Serial.println("ReadCardSerial");
+    if (!rfid.PICC_IsNewCardPresent()) {
+        Serial.println("PICC_IsNewCardPresent");
         return;
     }
-
+    if (!rfid.PICC_ReadCardSerial()){
+        Serial.println("PICC_ReadCardSerial()");
+        return;
+    } 
+    
     if (compareRFIDuids()) {
         // If the uid are equals, start the password process.
         startPasswordProcess(_passwordProcess);

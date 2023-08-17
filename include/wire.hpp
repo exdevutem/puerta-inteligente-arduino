@@ -6,7 +6,9 @@ void receiveEvent(int howMany) {
     Serial.println(); /* to newline */
 }
 
-void requestEvent() { Wire.write("Hello NodeMCU"); /*send string on request */ }
+void requestEvent() {
+    Wire.write("Hello NodeMCU"); /*send string on request */
+}
 
 void startWireConnection() {
     Wire.begin(I2C_BUS_ADDRESS);
