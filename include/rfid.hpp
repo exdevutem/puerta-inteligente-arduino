@@ -70,11 +70,13 @@ void checkRFID(bool& _passwordProcess) {
     
     if (compareRFIDuids()) {
         // If the uid are equals, start the password process.
-        startPasswordProcess(_passwordProcess);
+        // startPasswordProcess(_passwordProcess); // Se quitó esta opción
+        Serial.println("Bienvenide");
+        writeDisplay("Bienvenide", membersList[indexMember].name);
+        Servo();
     }
     
     // These are to prevent two PICC actives at the same time.
     rfid.PICC_HaltA();      // Halt PICC
     rfid.PCD_StopCrypto1(); // Stop encryption on PCD
 }
-

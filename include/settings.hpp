@@ -4,7 +4,10 @@
 #define BUTTON3PIN 2      // Set for Button 3. Uses pin 4.
 #define BUTTON4PIN 3      // Set for Button 4. Uses pin 5.
 #define INNERBUTTONPIN 5  // Set for inner Button. Uses pin 6.
+
+//SD
 #define SD_PIN 4           // Set for SD module. Uses pin 7.
+#define docSize JSON_OBJECT_SIZE(3) * 5 // Tamaño del Json (Librería ArduinoJson) * CANT_MIEMBROS 
 
 #define I2C_BUS_ADDRESS 0x3F //
 

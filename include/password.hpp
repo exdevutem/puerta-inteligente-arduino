@@ -1,9 +1,5 @@
 // Boolean to check if password array is "empty". Empty means {0, 0, 0, 0}
 
-
-
-
-
 bool isPasswordFillable() {
     bool fillable = false;
     for (int i = 0; i < passSize; i++) {

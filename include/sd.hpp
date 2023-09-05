@@ -1,6 +1,7 @@
 #include "../include/ArduinoJson-v6.21.2.h"
 
-void printDirectory(File dir, int numTabs) {
+void printDirectory(File dir, int numTabs) { // Imprime los archivos de la SD: printDirectory(SD.open(""), 10);
+
    while (true) {
      File entry =  dir.openNextFile();
      if (! entry) {
@@ -42,7 +43,7 @@ bool checkFileExists(String filename) {
 
 // Find or create
 File findOrCreateSD() {
-    String filename = "EXDE~1.JSO"; // NO AGREGA LA N A JSON
+    String filename = "EXDEV~1.JSO"; // NO AGREGA LA N A JSON
     if (!checkFileExists(filename)) {
         Serial.println("No se encontró el archivo");
         delay(2000);
@@ -56,7 +57,7 @@ void loadMembersToList() {
     if (exDevFile) return;
     
     exDevFile = findOrCreateSD();
-    DynamicJsonDocument doc(1024);
+    DynamicJsonDocument doc(docSize);
     DeserializationError error = deserializeJson(doc, exDevFile);
 
     if (error) {
@@ -73,7 +74,7 @@ void loadMembersToList() {
     for (size_t i = 0; i < sizeMembers; i++) {
         membersList[i].name = doc[i]["name"];
         membersList[i].rfid = doc[i]["rfid"];
-        membersList[i].pass = doc[i]["pass"];
+        //membersList[i].pass = doc[i]["pass"];
     }
     
     exDevFile.close();
