@@ -1,33 +1,41 @@
 // Constructor
-void startRFID() {
-    SPI.begin();     // Init SPI bus
-    rfid.PCD_Init(); // Init MFRC522
+void startRFID()
+{
+    SPI.begin();
+
+    rfid.PCD_Init();
 }
 
-String uidToString(MFRC522::Uid& uid) {  
+String uidToString(MFRC522::Uid &uid)
+{
     String rfidUid = "";
-    for (byte i = 0; i < uid.size; i++) {
+    for (byte i = 0; i < uid.size; i++)
+    {
         rfidUid += uid.uidByte[i] < 0x10 ? " 0" : "";
         rfidUid += String(uid.uidByte[i], HEX);
     }
-     rfidUid.toUpperCase();
-     return rfidUid;
+    rfidUid.toUpperCase();
+    return rfidUid;
 }
 
-bool isMember(String rfid) {
+bool isMember(String rfid)
+{
     //size_t n = 6; // sizeof(members) / sizeof(members[0]);
-    for (size_t i = 0; i < sizeMembers; i++) {
+    for (size_t i = 0; i < sizeMembers; i++)
+    {
         // Serial.print("isMember name ");
         // Serial.println(membersList[i].name);
-        if (rfid.equals(membersList[i].rfid)) {
+        if (rfid.equals(membersList[i].rfid))
+        {
             indexMember = i;
             return true;
         }
     }
-   return false;
+    return false;
 }
 
-bool compareRFIDuids() {
+bool compareRFIDuids()
+{
     //findSD("1234");
     /* Serial.println(rfid.uid.uidByte[0]);
     Serial.println(rfid.uid.uidByte[1]);
@@ -35,10 +43,13 @@ bool compareRFIDuids() {
     Serial.println(rfid.uid.uidByte[3]); */
     String currentRfid = uidToString(rfid.uid);
     Serial.println(currentRfid);
-    if (isMember(currentRfid)) {
+    if (isMember(currentRfid))
+    {
         Serial.println("Valido");
         return true;
-    } else {
+    }
+    else
+    {
         Serial.println("Invalido");
         return false;
     }
@@ -57,26 +68,34 @@ bool compareRFIDuids() {
 }
 
 // Main function for RFID.
-void checkRFID(bool& _passwordProcess) {
+void checkRFID(bool &_passwordProcess)
+{
     // Detecting and reading card
-    if (!rfid.PICC_IsNewCardPresent()) {
-        Serial.println("PICC_IsNewCardPresent");
+    if (!rfid.PICC_IsNewCardPresent())
+    {
+        if (DEBUG)
+        {
+            Serial.println("Revisando si hay un RFID presente...");
+        }
         return;
     }
-    if (!rfid.PICC_ReadCardSerial()){
+    if (!rfid.PICC_ReadCardSerial())
+    {
         Serial.println("PICC_ReadCardSerial()");
         return;
-    } 
-    
-    if (compareRFIDuids()) {
+    }
+
+    if (compareRFIDuids())
+    {
         // If the uid are equals, start the password process.
         // startPasswordProcess(_passwordProcess); // Se quitó esta opción
         Serial.println("Bienvenide");
         writeDisplay("Bienvenide", membersList[indexMember].name);
         Servo();
     }
-    
+
     // These are to prevent two PICC actives at the same time.
     rfid.PICC_HaltA();      // Halt PICC
     rfid.PCD_StopCrypto1(); // Stop encryption on PCD
 }
+
