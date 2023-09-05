@@ -62,7 +62,7 @@ void setup()
     ;
   }
 
-  startDisplay();
+  //startDisplay();
   startSD();
   startRFID();
   startButtons();
@@ -79,7 +79,6 @@ void loop()
   MG995_Servo.write(180);
   delay(2000);
   MG995_Servo.write(0);
-  delay(2000);
   */
  innerButton();
   if (passwordProcess) {
@@ -87,4 +86,5 @@ void loop()
   } else {
     checkRFID(passwordProcess);               
   }
+  delay(ms);
 }

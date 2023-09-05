@@ -45,7 +45,7 @@ bool checkFileExists(String filename)
 
 // Find or create
 File findOrCreateSD() {
-    String filename = "EXDE~1.JSO"; // NO AGREGA LA N A JSON
+    String filename = "a.json"; // NO AGREGA LA N A JSON
     if (!checkFileExists(filename)) {
         Serial.println("No se encontró el archivo");
         delay(2000);
@@ -59,7 +59,7 @@ void loadMembersToList() {
     if (exDevFile) return;
     
     exDevFile = findOrCreateSD();
-    DynamicJsonDocument doc(1024);
+    DynamicJsonDocument doc(96 * 1); // CAMBIAR A MEDIDA QUE SE AGREGAN USUARIOS
     DeserializationError error = deserializeJson(doc, exDevFile);
 
   if (error)
