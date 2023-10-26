@@ -92,6 +92,7 @@ void checkRFID(bool &_passwordProcess)
         Serial.println("Bienvenide");
         writeDisplay("Bienvenide", membersList[indexMember].name);
         Servo();
+        writeDisplay("Club ExDev", "");
     }
 
     // These are to prevent two PICC actives at the same time.

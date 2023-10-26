@@ -7,6 +7,7 @@
 #define BUTTON4PIN 3      // Set for Button 4. Uses pin 5.
 #define INNERBUTTONPIN 5  // Set for inner Button. Uses pin 6.
 #define SD_PIN 4           // Set for SD module. Uses pin 7.
+SdFat SD;
 
 #define I2C_BUS_ADDRESS 0x3F //
 
@@ -15,17 +16,25 @@
 
 // Servo
 Servo MG995_Servo; // Define an instance of of Servo with the name of "MG995_Servo"
-SdFat SD;
-#define Servo_PWM 11 // A descriptive name for D10 pin of Arduino to provide PWM signal
+#define Servo_PWM 6 // A descriptive name for D10 pin of Arduino to provide PWM signal
 // Inits
 
+char KEYS[] = {
+'1','2','3','A',
+'4','5','6','B',
+'7','8','9','C',
+'*','0','#','D'
+};
+
+
 LiquidCrystal_I2C lcd(0x3F, 16, 2);       // Set for Display. Uses pin A4, A5
+//OnewireKeypad <LiquidCrystal_I2C, 16> KP(lcd, KEYS, 4, 4, A3, 1000, 4700);
+//OnewireKeypad <Print, 16> KP(Serial, KEYS, 4, 4, A3, 1000, 4700);
 MFRC522 rfid(RFID_SDA_PIN, RFID_RST_PIN); // Set for RFID.
 bool passwordProcess;                     // Password process status
 const int passSize = 4;                   // Tamaño de la contraseña
 int password[passSize];                   // Array for password.
 byte nuidPICC[4];                         // Array to store UUID of the NFC
-File exDevFile;                           // File to manipulate the SD file.
 int ms = 1000;
 bool isServoOpen = false;
 // Dummys
