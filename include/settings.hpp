@@ -1,13 +1,12 @@
 #define DEBUG true
 
 // Pins
-#define BUTTON1PIN 0      // Set for Button 1. Uses pin 2.
-#define BUTTON2PIN 1      // Set for Button 2. Uses pin 3.
-#define BUTTON3PIN 2      // Set for Button 3. Uses pin 4.
-#define BUTTON4PIN 3      // Set for Button 4. Uses pin 5.
-#define INNERBUTTONPIN 5  // Set for inner Button. Uses pin 6.
-#define SD_PIN 4           // Set for SD module. Uses pin 7.
-SdFat SD;
+#define BUTTON1PIN 0     // Set for Button 1. Uses pin 2.
+#define BUTTON2PIN 1     // Set for Button 2. Uses pin 3.
+#define BUTTON3PIN 2     // Set for Button 3. Uses pin 4.
+#define BUTTON4PIN 3     // Set for Button 4. Uses pin 5.
+#define INNERBUTTONPIN 5 // Set for inner Button. Uses pin 6.
+#define SD_PIN 4         // Set for SD module. Uses pin 7.
 
 #define I2C_BUS_ADDRESS 0x3F //
 
@@ -16,18 +15,18 @@ SdFat SD;
 
 // Servo
 Servo MG995_Servo; // Define an instance of of Servo with the name of "MG995_Servo"
+SdFat SD;
+
 #define Servo_PWM 6 // A descriptive name for D10 pin of Arduino to provide PWM signal
 // Inits
 
 char KEYS[] = {
-'1','2','3','A',
-'4','5','6','B',
-'7','8','9','C',
-'*','0','#','D'
-};
+    '1', '2', '3', 'A',
+    '4', '5', '6', 'B',
+    '7', '8', '9', 'C',
+    '*', '0', '#', 'D'};
 
-
-LiquidCrystal_I2C lcd(0x3F, 16, 2);       // Set for Display. Uses pin A4, A5
+LiquidCrystal_I2C lcd(0x3F, 16, 2); // Set for Display. Uses pin A4, A5
 //OnewireKeypad <LiquidCrystal_I2C, 16> KP(lcd, KEYS, 4, 4, A3, 1000, 4700);
 //OnewireKeypad <Print, 16> KP(Serial, KEYS, 4, 4, A3, 1000, 4700);
 MFRC522 rfid(RFID_SDA_PIN, RFID_RST_PIN); // Set for RFID.

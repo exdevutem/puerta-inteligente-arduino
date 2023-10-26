@@ -14,9 +14,6 @@
 #include "../include/rfid.hpp"
 #include "../include/sd.hpp"
 
-// -- Unordered functions --
-// Must clean up these later.
-
 void menu(int option)
 {
   switch (option)
@@ -38,11 +35,10 @@ void setup()
   //startWireConnection();
   Serial.begin(9600); /* start serial for debug */
 
- 
   // Wait for USB Serial
   while (!Serial)
   {
-    ;
+    yield();
   }
 
   startDisplay();
@@ -62,12 +58,15 @@ void loop()
   int seconds = millis() / 1000;
   Serial.println(String(seconds) + " Segundos"); 
   */
- Servo();
- innerButton();
-  if (passwordProcess) {
+  Servo();
+  innerButton();
+  if (passwordProcess)
+  {
     checkButtons(passwordProcess);
-  } else {
-    checkRFID(passwordProcess);               
+  }
+  else
+  {
+    checkRFID(passwordProcess);
   }
   delay(ms);
 }
